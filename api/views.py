@@ -6,7 +6,7 @@ import cv2
 import numpy as np
 from rest_framework.response import Response
 import base64
-
+import io
 
 labels = ['glioma', 'meninigioma', 'notumor', 'pituitary']
 model  = tf.keras.models.load_model('static/brain_tumor.h5')
@@ -50,14 +50,25 @@ def api(request):
 
     return Response({'label': label})
 
+import json
 @api_view(['GET'])
 def api2(request):
     
     if request.method == 'GET':
-        data = request.data.get('image')
-        decoded_image = base64.b64decode(data)
+        print(request.body)
+        
+        image_data = request.data.get('image')
 
-        img = Image.open(decoded_image)
+        # Decode the base64-encoded image data into bytes
+
+        
+        decoded_image = base64.b64decode(image_data)
+
+        image_data = io.BytesIO(decoded_image)
+
+
+        img = Image.open(image_data)
+    
         img = np.array(img, dtype=np.float64)
 
 

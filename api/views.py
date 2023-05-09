@@ -57,17 +57,22 @@ def api2(request):
     if request.method == 'GET':
         print(request.body)
         
-        image_data = request.data.get('image')
+        image_str = request.data.get('image')
 
         # Decode the base64-encoded image data into bytes
 
+        img_b = image_str.encode('utf-8')
+
         
-        decoded_image = base64.b64decode(image_data)
+        decoded_image = base64.b64decode(img_b)
 
         image_data = io.BytesIO(decoded_image)
 
+        
+
 
         img = Image.open(image_data)
+        img.save('glioma.png')
     
         img = np.array(img, dtype=np.float64)
 

@@ -1,0 +1,1 @@
+web: gunicorn healthMLApi.wsgi:application --log-file - --log-level debug
